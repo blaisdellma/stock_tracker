@@ -1,0 +1,100 @@
+h1 {
+  color: blue;
+  text-align: center;
+}
+
+#versions {
+  text-align: center;
+}
+
+#overall_panel {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+#top_panel {
+  display: flex;
+  flex-flow: rows nowrap;
+  justify-content: flex-end;
+}
+
+#add_btn {
+  position: relative;
+  right: 10px;
+  border: 3px solid green;
+  border-radius: 5px;
+  padding: 5px;
+  background: white;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  align-content: baseline;
+  transition: 0.5s;
+}
+
+#add_btn:hover {
+  background: #d0d0d0;
+  border: 2px solid #10ff10;
+  padding: 6px;
+}
+
+#add_svg {
+  align-self: center;
+  width: 32px;
+  height: 32px;
+}
+
+#add_btn_text {
+  align-self: center;
+  padding: 10px;
+  font-size: 20px;
+}
+
+#add_text {
+  margin-right: 20px;
+  width: 100px;
+  font-size: 20px;
+}
+
+#add_msg {
+  margin-right: 20px;
+  font-size: 20px;
+  align-self: center;
+}
+
+#bot_panel {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+#side_panel {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+#side_panel_contents {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+#side_btn {
+  background: #c0c0c0;
+  border: 0px;
+  transition: 0.5s;
+}
+
+#side_btn:hover {
+  background: #707070;
+}
+
+#side_btn span {
+  content: '\00bb'
+}
+
+#main_panel {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-content: space-around;
+}

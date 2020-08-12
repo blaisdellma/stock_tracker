@@ -1,15 +1,49 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using node <script>document.write(process.versions.node)</script>,
-    Chrome <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  <link rel="stylesheet" href="../assets/index.css">
+</head>
+
+<body>
+  <div id="overall_panel">
+    <div id="top_panel">
+      <span id="add_msg">hello</span>
+      <input id="add_text"></input>
+      <button id="add_btn">
+        <div id="add_btn_text">ADD </div><img id="add_svg" src="../assets/images/plus.svg">
+      </button>
+    </div>
+    <div id="bot_panel">
+      <div id="side_panel">
+        <div id="side_panel_contents"></div>
+        <button id="side_btn"><span>>></span></button>
+      </div>
+      <div id="main_panel">
+        <div>
+          <h1>Hello World!</h1>
+          <div id="versions">
+            We are using node <script>
+              document.write(process.versions.node)
+            </script>,
+            Chrome <script>
+              document.write(process.versions.chrome)
+            </script>,
+            and Electron <script>
+              document.write(process.versions.electron)
+            </script>.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="index.js"></script>
+</body>
+
 </html>
