@@ -1,12 +1,3 @@
-h1 {
-  color: blue;
-  text-align: center;
-}
-
-#versions {
-  text-align: center;
-}
-
 #overall_panel {
   display: flex;
   flex-flow: column nowrap;
@@ -16,12 +7,12 @@ h1 {
   display: flex;
   flex-flow: rows nowrap;
   justify-content: flex-end;
+  background: #d0d0d0;
+  padding: 10px;
 }
 
-#add_btn {
+button {
   position: relative;
-  right: 10px;
-  border: 3px solid green;
   border-radius: 5px;
   padding: 5px;
   background: white;
@@ -30,6 +21,11 @@ h1 {
   justify-content: flex-end;
   align-content: baseline;
   transition: 0.5s;
+  margin-right: 20px;
+}
+
+#add_btn {
+  border: 3px solid green;
 }
 
 #add_btn:hover {
@@ -38,13 +34,24 @@ h1 {
   padding: 6px;
 }
 
-#add_svg {
+#update_btn {
+  border: 3px solid blue;
+}
+
+#update_btn:hover {
+  background: #d0d0d0;
+  border: 2px solid #1010ff;
+  padding: 6px;
+}
+
+.icon {
   align-self: center;
   width: 32px;
   height: 32px;
+  padding: 10px;
 }
 
-#add_btn_text {
+.btn_text {
   align-self: center;
   padding: 10px;
   font-size: 20px;
@@ -96,7 +103,7 @@ h1 {
 #main_panel {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-content: space-around;
 }
 

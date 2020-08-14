@@ -6,7 +6,7 @@ function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({
     //frame: false,
-    width: 800,
+    width: 600,
     height: 600,
     webPreferences: {
       nodeIntegration: true

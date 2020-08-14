@@ -14,6 +14,7 @@
   "dependencies": {
     "console": "^0.7.2",
     "iexcloud_api_wrapper": "^1.1.5",
+    "node-fetch": "^2.6.0",
     "url-join": "^4.0.1"
   }
 }
