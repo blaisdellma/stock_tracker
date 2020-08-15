@@ -64,7 +64,7 @@ button {
   text-transform: uppercase;
 }
 
-#add_msg {
+#msg {
   margin-right: 20px;
   font-size: 20px;
   align-self: center;
@@ -115,4 +115,25 @@ button {
   font-weight: bold;
   text-align: center;
   min-width: 80px;
+  position: relative;
+}
+
+.deleteBtn {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  margin: 2px;
+  opacity: 60%;
+  transition: 0.5s;
+}
+
+.deleteBtn:hover {
+  opacity: 100%;
+}
+
+.small_icon {
+  align-self: center;
+  width: 10px;
+  height: 10px;
+  padding: 3px;
 }

@@ -1,44 +1,32 @@
-const {
-  app,
-  BrowserWindow,
-  Menu
-} = require('electron')
 const fs = require('fs')
-const path = require('path')
-const url = require('url')
-const iex = require('iexcloud_api_wrapper')
-
 const fetch = require('node-fetch');
 
-const base_url1 = "https://sandbox.iexapis.com/stable/stock/market/batch?token=";
-const base_url2 = "&types=quote&filter=symbol,latestPrice&symbols=";
+var console_out = new require('console').Console(process.stdout, process.stderr);
 
-var new_console = new require('console').Console(process.stdout, process.stderr);
-new_console.log("RELOAD");
+const token = JSON.parse(fs.readFileSync('iex_test_cred.json')).api_token;
+console_out.log("Using " + token + " as API token");
 
-var token = JSON.parse(fs.readFileSync('iex_test_cred.json')).api_token;
-new_console.log(token);
+const base_url = "https://sandbox.iexapis.com/stable/stock/market/batch?token=" + token + "&types=quote&filter=symbol,latestPrice&symbols=";
 
 var stockList = ["GOOG", "AAPL", "VTI", "PPL", "DOW", "TSLA"];
-var priceList = [0, 0, 0, 0, 0, 0];
 
 function getURL() {
-  return base_url1 + token + base_url2 + stockList.join(",");
+  return base_url + stockList.join(",");
 }
 
 function clearMsg() {
-  document.getElementById("add_msg").style.color = "black";
-  document.getElementById("add_msg").innerHTML = "";
+  document.getElementById("msg").style.color = "black";
+  document.getElementById("msg").innerHTML = "";
 }
 
 function sendMsg(str) {
-  document.getElementById("add_msg").style.color = "black";
-  document.getElementById("add_msg").innerHTML = str;
+  document.getElementById("msg").style.color = "black";
+  document.getElementById("msg").innerHTML = str;
 }
 
 function sendErr(str) {
-  document.getElementById("add_msg").style.color = "red";
-  document.getElementById("add_msg").innerHTML = str;
+  document.getElementById("msg").style.color = "red";
+  document.getElementById("msg").innerHTML = str;
 }
 
 document.getElementById("add_btn").addEventListener("click", function(event) {
@@ -61,30 +49,26 @@ function addBtnClick() {
   document.getElementById("add_text").value = '';
 
   if (stock_id != "") {
-    //update_quote(stock_id, true);
     stockList.push(stock_id);
     stockList = stockList.reduce((unique, item) => {
       return unique.includes(item) ? unique : [...unique, item];
     }, []);
-    //fetchPrices();
     updateStocks();
   }
 
 }
 
-// async function fetchPrices() {
-//   var iexURL = getURL(stockList);
-//   new_console.log(iexURL);
-//   await fetch(iexURL, {
-//     method: "Get"
-//   }).then(res => res.json()).then((json) => {
-//     new_console.log(json);
-//     stockList.forEach((stock_id, i) => {
-//       priceList[i] = json[stock_id].quote.latestPrice;
-//     });
-//   });
-//   new_console.log(priceList);
-// }
+function createDeleteBtn() {
+  var new_node = document.createElement("DIV");
+  new_node.className = 'deleteBtn';
+  new_node.onclick = function(event) {
+    stockList.splice(stockList.indexOf(new_node.parentNode.id),1);
+    console_out.log("Deleting: " + new_node.parentNode.id + " -> " + stockList);
+    new_node.parentNode.parentNode.removeChild(new_node.parentNode);
+  };
+  new_node.innerHTML = '<img class="small_icon" src="../assets/images/020-close.svg">';
+  return new_node;
+}
 
 function updateStocks() {
   clearMsg();
@@ -95,7 +79,7 @@ function updateStocks() {
   var settings = {
     method: "Get"
   };
-  new_console.log(iexURL);
+  console_out.log("\nSending request: " + iexURL);
 
   fetch(iexURL, settings).then(res => {
     if (res.ok) {
@@ -104,26 +88,27 @@ function updateStocks() {
       throw res.statusText;
     }
   }, error => {
-    new_console.log(error);
+    console_out.log("\nERROR:\n" + error);
     sendErr("ERROR");
   }).then(json => {
       document.getElementById('main_panel').innerHTML = '';
       stockList = [];
-      new_console.log(json);
+      console_out.log("\nReply:")
+      console_out.log(json);
       for (let [stock_id, value] of Object.entries(json)) {
-        //priceList[i] = json[stock_id].quote.latestPrice;
         stockList.push(stock_id);
         new_node = document.createElement("DIV");
         new_node.id = stock_id;
         new_node.className = 'stock';
         new_node.innerHTML = stock_id + '<br>$<span>' + value.quote.latestPrice + '</span>';
+        new_node.appendChild(createDeleteBtn());
         document.getElementById('main_panel').appendChild(new_node);
       }
 
-      new_console.log(stockList);
+      console_out.log("Stock list: " + stockList);
 
   }, (error) => {
-    new_console.log(error);
+    console_out.log(error);
     sendErr("ERROR: " + error);
     if (error == "Not Found") {
       stockList.pop();
