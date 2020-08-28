@@ -25,12 +25,12 @@ function clearMsg() {
   document.getElementById("msg").innerHTML = "";
 }
 
-function sendMsg(str) {
+function showMsg(str) {
   document.getElementById("msg").style.color = "black";
   document.getElementById("msg").innerHTML = str;
 }
 
-function sendErr(str) {
+function showErr(str) {
   document.getElementById("msg").style.color = "red";
   document.getElementById("msg").innerHTML = str;
 }
@@ -58,13 +58,17 @@ document.getElementById("side_btn").addEventListener("click", function(event) {
 });
 
 function side_slide_in() {
-  document.getElementById("side_panel_contents").style.width = "0px";
+  document.getElementById("side_panel").style.width = "0px";
+  document.getElementById("main_panel").style.width = "610px";
   document.getElementById("side_svg").style.transform = "scaleX(1)";
   side_out = false;
+
+  side_stock_id = "";
 }
 
 function side_slide_out(stock_id) {
-  document.getElementById("side_panel_contents").style.width = "100px";
+  document.getElementById("side_panel").style.width = "122px";
+  document.getElementById("main_panel").style.width = "488px";
   document.getElementById("side_svg").style.transform = "scaleX(-1)";
   side_out = true;
 
@@ -72,6 +76,9 @@ function side_slide_out(stock_id) {
 }
 
 function update_side() {
+
+  if (side_stock_id == "") return;
+
   document.getElementById("side_title").innerHTML = side_stock_id;
   //document.getElementById("side_value").innerHTML = "$" + document.getElementById(stock_id + "_value").innerHTML;
   document.getElementById("side_value").innerHTML = "$" + reply_data[side_stock_id].quote.latestPrice;
@@ -136,7 +143,7 @@ function updateStocks() {
     }
   }, error => {
     console_out.log("\nERROR:\n" + error);
-    sendErr("ERROR");
+    showErr("ERROR");
   }).then(json => {
       document.getElementById('main_panel').innerHTML = '';
       stockList = [];
@@ -150,7 +157,8 @@ function updateStocks() {
         new_node = document.createElement("DIV");
         new_node.id = stock_id;
         new_node.className = 'stock';
-        new_node.innerHTML = stock_id + '<br>$<span id=' + stock_id + '_value' + '>' + value.quote.latestPrice + '</span>';
+        //new_node.innerHTML = stock_id + '<br>$<span id=' + stock_id + '_value' + '>' + value.quote.latestPrice + '</span>';
+        new_node.innerHTML = '<span>' + stock_id + '<br>$' + value.quote.latestPrice + '</span>';
         new_node.appendChild(createDeleteBtn());
         new_node.addEventListener('click', function(event) {
           console_out.log("CLICK ON " + stock_id);
@@ -162,13 +170,16 @@ function updateStocks() {
 
       console_out.log("Stock list: " + stockList);
 
+      update_side();
+
   }, (error) => {
     console_out.log(error);
-    sendErr("ERROR: " + error);
+    showErr("ERROR: " + error);
     if (error == "Not Found") {
       stockList.pop();
     }
   });
+
 
 }
 

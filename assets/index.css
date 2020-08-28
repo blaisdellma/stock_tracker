@@ -79,14 +79,15 @@
 #side_panel {
   display: flex;
   flex-flow: row nowrap;
+  width: 0px;
+  overflow-x: hidden;
+  transition: 0.75s;
 }
 
 #side_panel_contents {
   display: flex;
   flex-flow: column nowrap;
-  transition: 0.75s;
-  width: 0px;
-  overflow-x: hidden;
+  width: 100px;
 }
 
 #side_btn {
@@ -115,16 +116,21 @@
   flex-flow: row wrap;
   justify-content: flex-start;
   align-content: flex-start;
+  width: 610px;
+  height: 100px;
+  overflow-y: scroll;
 }
 
 .stock {
   border: 1px solid black;
+  border-radius: 10px;
   margin: 10px;
   padding: 10px;
   font-size: 20px;
   font-weight: bold;
   text-align: center;
-  min-width: 80px;
+  width: 80px;
+  height: 50px;
   position: relative;
 }
 
@@ -170,4 +176,8 @@
   width: 20px;
   height: 20px;
   align-self: center;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
 }

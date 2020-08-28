@@ -6,11 +6,12 @@ function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({
     //frame: false,
-    width: 600,
-    height: 600,
+    width: 632,
+    height: 300,
     webPreferences: {
       nodeIntegration: true
-    }
+    },
+    resizable: false,
   })
 
   // and load the index.html of the app.
