@@ -103,6 +103,9 @@ body {
   display: flex;
   flex-flow: column nowrap;
   width: 100px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 #side_btn {
@@ -169,24 +172,6 @@ body {
   width: 10px;
   height: 10px;
   padding: 3px;
-}
-
-#side_title {
-  font-size: 20px;
-  font-weight: bold;
-  text-align: center;
-}
-
-#side_value {
-  font-size: 20px;
-  font-weight: bold;
-  text-align: center;
-}
-
-#side_text {
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
 }
 
 #change_arrow_svg {

@@ -6,7 +6,6 @@ var console_out = new require('console').Console(process.stdout, process.stderr)
 const token = JSON.parse(fs.readFileSync('iex_test_cred.json')).api_token;
 console_out.log("Using " + token + " as API token");
 
-//const base_url = "https://sandbox.iexapis.com/stable/stock/market/batch?token=" + token + "&types=quote&filter=symbol,latestPrice&symbols=";
 const base_url = "https://sandbox.iexapis.com/stable/stock/market/batch?token=" + token + "&types=quote&symbols=";
 
 var stockList = ["GOOG", "AAPL", "VTI", "PPL", "DOW", "TSLA", "GE", "GOOGL", "SNP", "MMM", "AMZN", "KO", "COST", "BAC"];
@@ -81,11 +80,6 @@ function update_side() {
 
   side_html = "";
 
-  // document.getElementById("side_title").innerHTML = side_stock_id;
-  // //document.getElementById("side_value").innerHTML = "$" + document.getElementById(stock_id + "_value").innerHTML;
-  // document.getElementById("side_value").innerHTML = "$" + reply_data[side_stock_id].quote.latestPrice;
-  // //document.getElementById("side_details").innerHTML = JSON.stringify(reply_data[stock_id].quote);
-
   change_img = "<br><br>";
   if (reply_data[side_stock_id].quote.change > 0) {
     change_img = "<br><br><img id=change_arrow_svg src=../assets/images/004-up-arrow-8.svg>"
@@ -100,7 +94,7 @@ function update_side() {
   side_html = side_html + '<br>' + reply_data[side_stock_id].quote.changePercent + '%';
   side_html = side_html + '<br><br>' + 'P/E:<br>' + reply_data[side_stock_id].quote.peRatio;
 
-  document.getElementById("side_text").innerHTML = side_html;
+  document.getElementById("side_panel_contents").innerHTML = side_html;
 }
 
 function addBtnClick() {
@@ -121,7 +115,6 @@ function addBtnClick() {
 function createDeleteBtn() {
   var new_node = document.createElement("DIV");
   new_node.className = 'deleteBtn';
-  //new_node.onclick =
   new_node.addEventListener('click', function(event) {
     stockList.splice(stockList.indexOf(new_node.parentNode.id),1);
     console_out.log("Deleting: " + new_node.parentNode.id + " -> " + stockList);
@@ -165,7 +158,6 @@ function updateStocks() {
         new_node = document.createElement("DIV");
         new_node.id = stock_id;
         new_node.className = 'stock';
-        //new_node.innerHTML = stock_id + '<br>$<span id=' + stock_id + '_value' + '>' + value.quote.latestPrice + '</span>';
         new_node.innerHTML = '<span>' + stock_id + '<br>$' + value.quote.latestPrice + '</span>';
         new_node.appendChild(createDeleteBtn());
         new_node.addEventListener('click', function(event) {
@@ -191,4 +183,4 @@ function updateStocks() {
 
 }
 
-//updateStocks();
+updateStocks();
