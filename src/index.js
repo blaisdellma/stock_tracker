@@ -76,23 +76,25 @@ function side_slide_out(stock_id) {
 
 function update_side() {
 
-  if (side_stock_id == "") return;
-
   side_html = "";
 
-  change_img = "<br><br>";
-  if (reply_data[side_stock_id].quote.change > 0) {
-    change_img = "<br><br><img id=change_arrow_svg src=../assets/images/004-up-arrow-8.svg>"
-  } else if (reply_data[side_stock_id].quote.change < 0) {
-    change_img = "<br><br><img id=change_arrow_svg src=../assets/images/062-down-arrow-8.svg>"
+  if (side_stock_id != "") {
+
+    change_img = "<br><br>";
+    if (reply_data[side_stock_id].quote.change > 0) {
+      change_img = "<br><br><img id=change_arrow_svg src=../assets/images/004-up-arrow-8.svg>"
+    } else if (reply_data[side_stock_id].quote.change < 0) {
+      change_img = "<br><br><img id=change_arrow_svg src=../assets/images/062-down-arrow-8.svg>"
+    }
+
+    side_html = side_html + side_stock_id
+    side_html = side_html + '<br>' + "$" + reply_data[side_stock_id].quote.latestPrice;
+
+    side_html = side_html + change_img + '<br>' + reply_data[side_stock_id].quote.change
+    side_html = side_html + '<br>' + reply_data[side_stock_id].quote.changePercent + '%';
+    side_html = side_html + '<br><br>' + 'P/E:<br>' + reply_data[side_stock_id].quote.peRatio;
+
   }
-
-  side_html = side_html + side_stock_id
-  side_html = side_html + '<br>' + "$" + reply_data[side_stock_id].quote.latestPrice;
-
-  side_html = side_html + change_img + '<br>' + reply_data[side_stock_id].quote.change
-  side_html = side_html + '<br>' + reply_data[side_stock_id].quote.changePercent + '%';
-  side_html = side_html + '<br><br>' + 'P/E:<br>' + reply_data[side_stock_id].quote.peRatio;
 
   document.getElementById("side_panel_contents").innerHTML = side_html;
 }
@@ -116,10 +118,17 @@ function createDeleteBtn() {
   var new_node = document.createElement("DIV");
   new_node.className = 'deleteBtn';
   new_node.addEventListener('click', function(event) {
-    stockList.splice(stockList.indexOf(new_node.parentNode.id),1);
+
+    if (new_node.parentNode.id == side_stock_id) {
+      side_slide_in();
+    }
+
+    stockList.splice(stockList.indexOf(new_node.parentNode.id), 1);
     console_out.log("Deleting: " + new_node.parentNode.id + " -> " + stockList);
     new_node.parentNode.parentNode.removeChild(new_node.parentNode);
     event.stopPropagation();
+
+
   }, true);
   new_node.innerHTML = '<img class="small_icon" src="../assets/images/020-close.svg">';
   return new_node;
@@ -146,31 +155,31 @@ function updateStocks() {
     console_out.log("\nERROR:\n" + error);
     showErr("ERROR");
   }).then(json => {
-      document.getElementById('main_panel').innerHTML = '';
-      stockList = [];
-      console_out.log("\nReply:")
-      console_out.log(json);
+    document.getElementById('main_panel').innerHTML = '';
+    stockList = [];
+    console_out.log("\nReply:")
+    console_out.log(json);
 
-      reply_data = json;
+    reply_data = json;
 
-      for (let [stock_id, value] of Object.entries(json)) {
-        stockList.push(stock_id);
-        new_node = document.createElement("DIV");
-        new_node.id = stock_id;
-        new_node.className = 'stock';
-        new_node.innerHTML = '<span>' + stock_id + '<br>$' + value.quote.latestPrice + '</span>';
-        new_node.appendChild(createDeleteBtn());
-        new_node.addEventListener('click', function(event) {
-          console_out.log("CLICK ON " + stock_id);
-          side_slide_out(stock_id);
-          update_side();
-        },false);
-        document.getElementById('main_panel').appendChild(new_node);
-      }
+    for (let [stock_id, value] of Object.entries(json)) {
+      stockList.push(stock_id);
+      new_node = document.createElement("DIV");
+      new_node.id = stock_id;
+      new_node.className = 'stock';
+      new_node.innerHTML = '<span>' + stock_id + '<br>$' + value.quote.latestPrice + '</span>';
+      new_node.appendChild(createDeleteBtn());
+      new_node.addEventListener('click', function(event) {
+        console_out.log("CLICK ON " + stock_id);
+        side_slide_out(stock_id);
+        update_side();
+      }, false);
+      document.getElementById('main_panel').appendChild(new_node);
+    }
 
-      console_out.log("Stock list: " + stockList);
+    console_out.log("Stock list: " + stockList);
 
-      update_side();
+    update_side();
 
   }, (error) => {
     console_out.log(error);
