@@ -9,7 +9,7 @@ console_out.log("Using " + token + " as API token");
 //const base_url = "https://sandbox.iexapis.com/stable/stock/market/batch?token=" + token + "&types=quote&filter=symbol,latestPrice&symbols=";
 const base_url = "https://sandbox.iexapis.com/stable/stock/market/batch?token=" + token + "&types=quote&symbols=";
 
-var stockList = ["GOOG", "AAPL", "VTI", "PPL", "DOW", "TSLA"];
+var stockList = ["GOOG", "AAPL", "VTI", "PPL", "DOW", "TSLA", "GE", "GOOGL", "SNP", "MMM", "AMZN", "KO", "COST", "BAC"];
 
 var side_out = false;
 var side_stock_id = "";
@@ -79,20 +79,28 @@ function update_side() {
 
   if (side_stock_id == "") return;
 
-  document.getElementById("side_title").innerHTML = side_stock_id;
-  //document.getElementById("side_value").innerHTML = "$" + document.getElementById(stock_id + "_value").innerHTML;
-  document.getElementById("side_value").innerHTML = "$" + reply_data[side_stock_id].quote.latestPrice;
-  //document.getElementById("side_details").innerHTML = JSON.stringify(reply_data[stock_id].quote);
+  side_html = "";
 
-  change_img = "";
+  // document.getElementById("side_title").innerHTML = side_stock_id;
+  // //document.getElementById("side_value").innerHTML = "$" + document.getElementById(stock_id + "_value").innerHTML;
+  // document.getElementById("side_value").innerHTML = "$" + reply_data[side_stock_id].quote.latestPrice;
+  // //document.getElementById("side_details").innerHTML = JSON.stringify(reply_data[stock_id].quote);
 
+  change_img = "<br><br>";
   if (reply_data[side_stock_id].quote.change > 0) {
-    change_img = "<img id=change_arrow_svg src=../assets/images/004-up-arrow-8.svg><br>"
+    change_img = "<br><br><img id=change_arrow_svg src=../assets/images/004-up-arrow-8.svg>"
   } else if (reply_data[side_stock_id].quote.change < 0) {
-    change_img = "<img id=change_arrow_svg src=../assets/images/062-down-arrow-8.svg><br>"
+    change_img = "<br><br><img id=change_arrow_svg src=../assets/images/062-down-arrow-8.svg>"
   }
 
-  document.getElementById("side_details").innerHTML = change_img + reply_data[side_stock_id].quote.change;
+  side_html = side_html + side_stock_id
+  side_html = side_html + '<br>' + "$" + reply_data[side_stock_id].quote.latestPrice;
+
+  side_html = side_html + change_img + '<br>' + reply_data[side_stock_id].quote.change
+  side_html = side_html + '<br>' + reply_data[side_stock_id].quote.changePercent + '%';
+  side_html = side_html + '<br><br>' + 'P/E:<br>' + reply_data[side_stock_id].quote.peRatio;
+
+  document.getElementById("side_text").innerHTML = side_html;
 }
 
 function addBtnClick() {
