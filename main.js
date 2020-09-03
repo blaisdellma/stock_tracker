@@ -1,15 +1,17 @@
 const {
   app,
   BrowserWindow,
-  Menu
+  Menu,
+  ipcMain
 } = require('electron')
 const path = require('path')
 const url = require('url')
 
 var console_out = new require('console').Console(process.stdout, process.stderr);
 
-function createWindow() {
-  const win = new BrowserWindow({
+app.whenReady().then(() => {
+
+  const mainWin = new BrowserWindow({
     frame: false,
     transparent: true,
     width: 610,
@@ -30,15 +32,19 @@ function createWindow() {
       {
         label: 'Toggle DevTools',
         click() {
-          if (win.webContents.isDevToolsOpened()) {
-            win.webContents.toggleDevTools();
+          if (BrowserWindow.getFocusedWindow().webContents.isDevToolsOpened()) {
+            BrowserWindow.getFocusedWindow().webContents.toggleDevTools();
           } else {
-            win.webContents.openDevTools({mode:'undocked'});
+            BrowserWindow.getFocusedWindow().webContents.openDevTools({
+              mode: 'undocked'
+            });
           }
         },
         accelerator: 'Alt+T'
       },
-      {type: 'separator'},
+      {
+        type: 'separator'
+      },
       {
         label: 'Exit',
         click() {
@@ -49,19 +55,55 @@ function createWindow() {
     ]
   }]));
 
-  win.loadURL(url.format({
+  mainWin.loadURL(url.format({
     pathname: path.join(__dirname, 'src/index.html'),
     protocol: 'file:',
     slashes: true,
   }))
 
-  win.on('ready-to-show', () => {
-    win.show();
+  mainWin.on('ready-to-show', () => {
+    mainWin.show();
   })
 
-}
+  const creditsWin = new BrowserWindow({
+    frame: false,
+    transparent: true,
+    modal: true,
+    parent: mainWin,
+    width: 300,
+    height: 300,
+    useContentSize: true,
+    webPreferences: {
+      nodeIntegration: true
+    },
+    resizable: false,
+    show: false,
+  })
 
-app.whenReady().then(createWindow);
+  creditsWin.loadURL(url.format({
+    pathname: path.join(__dirname, 'src/credits.html'),
+    protocol: 'file:',
+    slashes: true,
+  }))
+
+  creditsWin.on('ready-to-show', () => {
+    ipcMain.on('openCredits', (event, arg) => {
+      console_out.log('openCredits');
+      creditsWin.show();
+    })
+
+    ipcMain.on('hideCredits', (event, arg) => {
+      console_out.log('hideCredits');
+      creditsWin.hide();
+      mainWin.focus();
+    })
+  })
+
+  ipcMain.on('closeWindow', (event, arg) => {
+    mainWin.close();
+  })
+
+});
 
 // Not sure if code below from Electron boilerplate is necessary, but I'm keeping it
 

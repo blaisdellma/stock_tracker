@@ -1,3 +1,4 @@
+const {ipcRenderer} = require('electron');
 const fs = require('fs')
 const fetch = require('node-fetch');
 
@@ -54,6 +55,17 @@ document.getElementById("side_btn").addEventListener("click", function(event) {
   } else {
     side_slide_out("");
   }
+});
+
+document.getElementById("credits").addEventListener("click", function(event) {
+  console_out.log("credits click");
+  ipcRenderer.send('openCredits','message');
+});
+
+
+document.getElementById("exitBtn").addEventListener("click", function(event) {
+  console_out.log("exit click");
+  ipcRenderer.send('closeWindow','message');
 });
 
 function side_slide_in() {
